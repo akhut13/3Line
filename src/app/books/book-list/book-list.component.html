@@ -34,3 +34,10 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)"></tr>
 
 </table>
+
+
+<mat-paginator [length]="pagination.length"
+               [pageSize]="pagination.pageSize"
+               [pageSizeOptions]="pagination.pageSizeOptions"
+               (page)="pageEvent = $event">
+</mat-paginator>
