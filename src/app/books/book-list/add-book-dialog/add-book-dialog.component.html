@@ -1,0 +1,20 @@
+<h2>Add Book</h2>
+
+<mat-dialog-content>
+  <div class="example-container">
+    <mat-form-field>
+      <input [(ngModel)]="data.name" matInput placeholder="Name">
+    </mat-form-field>
+
+    <mat-form-field>
+      <textarea [(ngModel)]="data.author" matInput placeholder="Author"></textarea>
+    </mat-form-field>
+
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button (click)="onYesClick()">Save</button>
+  <button mat-raised-button (click)="onNoClick()">Cancel</button>
+</mat-dialog-actions>
+

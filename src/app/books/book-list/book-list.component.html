@@ -1,3 +1,36 @@
-<mat-list *ngFor="let book of books">
-  <app-book [book]="book"></app-book>
-</mat-list>
+
+<button mat-raised-button (click)="addBookClicked()">Add Book</button>
+
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+
+<table mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let book;"> {{book.position}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell class="description-cell"
+         *matCellDef="let book;">{{book.name}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="author">
+    <th mat-header-cell *matHeaderCellDef>Author</th>
+    <td mat-cell class="duration-cell"
+         *matCellDef="let book;">{{book.author}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+    <td mat-cell class="duration-cell"
+         *matCellDef="let book;">{{book.publishDate.getDate() + '-' + book.publishDate.getMonth() + '-' + book.publishDate.getFullYear()}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="onRowClicked(row)"></tr>
+
+</table>

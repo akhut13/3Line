@@ -1,7 +1,6 @@
-export class Book {
-
-  constructor(public name: string,
-              public author: string,
-              public publishDate: Date) {}
-
+export interface Book {
+  position: number;
+  name: string;
+  author: string;
+  publishDate: Date;
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {Book} from '../shared/book.model';
 
+
+
 @Component({
   selector: 'app-books',
   templateUrl: './books.component.html',
@@ -8,12 +10,14 @@ import {Book} from '../shared/book.model';
 })
 export class BooksComponent implements OnInit {
 
-  books: Book[] = [
-    new Book('kuku1', 'lala', new Date()),
-    new Book('kuku2', 'lala', new Date()),
-    new Book('kuku3', 'lala', new Date())
-  ];
 
+  books: Book[] = [
+    {position: 1, name: 'Hydrogen', author: 'kukukulii', publishDate: new Date()},
+    {position: 2, name: 'Hydrogen', author: 'kukukulii', publishDate: new Date()},
+    {position: 3, name: 'Hydrogen', author: 'kukukulii', publishDate: new Date()},
+    {position: 4, name: 'Hydrogen', author: 'kukukulii', publishDate: new Date()},
+    {position: 5, name: 'Hydrogen', author: 'kukukulii', publishDate: new Date()},
+  ];
   constructor() { }
 
   ngOnInit() {
