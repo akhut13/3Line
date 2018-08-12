@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {AddBookDialogComponent} from './add-book-dialog/add-book-dialog.component';
 import {Book} from '../../shared/book.model';
 import {tap} from 'rxjs/internal/operators';
@@ -14,16 +14,17 @@ export class BookListComponent implements OnInit {
 
   @Input() books: Array<Book>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   displayedColumns = ['position', 'name', 'author', 'date'];
   newBook: Book = {position: 1, name: '', author: '', publishDate: new Date()};
   dataSource = new MatTableDataSource([]);
 
   pagination = {
-    length: 2,
-    pageSize: 2,
+    length: 5,
+    pageSize: 5,
     pageIndex: 0,
-    pageSizeOptions: [2, 4, 6, 8],
+    pageSizeOptions: [5, 10, 20],
   };
 
   constructor(public dialog: MatDialog) {
@@ -71,5 +72,6 @@ export class BookListComponent implements OnInit {
     let endIndex = startIndex + this.pagination.pageSize;
     let booksPage = this.books.slice(startIndex, endIndex);
     this.dataSource = new MatTableDataSource(booksPage);
+    this.dataSource.sort = this.sort;
   }
 }

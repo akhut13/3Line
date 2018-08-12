@@ -5,7 +5,7 @@
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
-<table mat-table class="mat-elevation-z8" [dataSource]="dataSource">
+<table mat-table matSort class="mat-elevation-z8" [dataSource]="dataSource">
 
   <ng-container matColumnDef="position">
     <th mat-header-cell *matHeaderCellDef> No. </th>
@@ -13,7 +13,7 @@
   </ng-container>
 
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
     <td mat-cell class="description-cell"
          *matCellDef="let book;">{{book.name}}</td>
   </ng-container>
