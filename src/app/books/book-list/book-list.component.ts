@@ -64,15 +64,32 @@ export class BookListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      result.position = this.books[this.books.length - 1].id + 1;
-      this.books.push(result);
-      this.updateTableData();
+      if (result) {
+        result.position = this.books[this.books.length - 1].id + 1;
+        this.books.push(result);
+        this.updateTableData();
+      }
     });
   }
 
   editBook(book){
+    const dialogRef = this.dialog.open(AddBookDialogComponent, {
+      width: '500px',
+      data: Object.assign({}, book)
+    });
 
-
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if (result) {
+        this.books.forEach(book => {
+          if (book.id === result.id) {
+            book.name = result.name;
+            book.author = result.author;
+          }
+        });
+        this.updateTableData();
+      }
+    });
   }
 
   private deleteBookById(id) {
@@ -109,7 +126,6 @@ export class BookListComponent implements OnInit {
     let endIndex = startIndex + this.pagination.pageSize;
     this.booksPage = this.books.slice(startIndex, endIndex);
     this.setCheckBox(this.booksPage, this.selectAll);
-    console.log(this.booksPage);
     this.dataSource = new MatTableDataSource(this.booksPage);
     this.dataSource.sort = this.sort;
   }
