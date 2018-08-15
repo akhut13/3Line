@@ -16,9 +16,12 @@ export class BookListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  displayedColumns = ['position', 'name', 'author', 'date'];
-  newBook: Book = {position: 1, name: '', author: '', publishDate: new Date()};
+  displayedColumns = ['checkbox', 'id', 'name', 'author', 'date', 'delete', 'edit'];
+  newBook: Book = {id: 1, name: '', author: '', publishDate: new Date()};
   dataSource = new MatTableDataSource([]);
+  selectAll = false;
+  booksPage = [];
+  selectedBooks = [];
 
   pagination = {
     length: 5,
@@ -61,17 +64,53 @@ export class BookListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      result.position = this.books[this.books.length - 1].position + 1;
+      result.position = this.books[this.books.length - 1].id + 1;
       this.books.push(result);
       this.updateTableData();
+    });
+  }
+
+  editBook(book){
+
+
+  }
+
+  private deleteBookById(id) {
+    this.books.forEach((book, index) => {
+      if (book.id === id) {
+        this.books.splice(index, 1);
+      }
+    });
+  }
+
+  deleteBook(id=null) {
+    if (!id) {
+      let deleteIds = this.booksPage.filter(item => item.selected).map(book => book.id);
+      deleteIds.forEach((id) => this.deleteBookById(id));
+      this.selectAll = false;
+    } else {
+      this.deleteBookById(id);
+    }
+    this.updateTableData();
+  }
+
+  selectAllChange() {
+    this.setCheckBox(this.booksPage, this.selectAll);
+  }
+
+  private setCheckBox(data, value = false) {
+    data.forEach(item => {
+      item['selected'] = value;
     });
   }
 
   updateTableData() {
     let startIndex = this.pagination.pageIndex * this.pagination.pageSize;
     let endIndex = startIndex + this.pagination.pageSize;
-    let booksPage = this.books.slice(startIndex, endIndex);
-    this.dataSource = new MatTableDataSource(booksPage);
+    this.booksPage = this.books.slice(startIndex, endIndex);
+    this.setCheckBox(this.booksPage, this.selectAll);
+    console.log(this.booksPage);
+    this.dataSource = new MatTableDataSource(this.booksPage);
     this.dataSource.sort = this.sort;
   }
 }

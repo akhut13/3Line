@@ -9,3 +9,7 @@ td.mat-cell {
 .mat-raised-button {
   float: left
 }
+
+.mat-column-checkbox {
+  width: 50px;
+}

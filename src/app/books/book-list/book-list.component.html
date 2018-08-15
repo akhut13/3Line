@@ -1,33 +1,63 @@
-
 <button mat-raised-button (click)="addBookClicked()">Add Book</button>
+<button mat-raised-button (click)="deleteBook()">Delete All</button>
+
 
 <mat-form-field>
   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
 </mat-form-field>
 
 <table mat-table matSort class="mat-elevation-z8" [dataSource]="dataSource">
+  <ng-container matColumnDef="checkbox">
+    <th mat-header-cell *matHeaderCellDef>
+      <mat-checkbox (change)="selectAllChange()" [(ngModel)]="selectAll"></mat-checkbox>
+    </th>
+    <td mat-cell *matCellDef="let book;">
+      <mat-checkbox [(ngModel)]="book.selected"></mat-checkbox>
+    </td>
+  </ng-container>
 
-  <ng-container matColumnDef="position">
-    <th mat-header-cell *matHeaderCellDef> No. </th>
-    <td mat-cell *matCellDef="let book;"> {{book.position}} </td>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef> ID </th>
+    <td mat-cell *matCellDef="let book;"> {{book.id}}</td>
   </ng-container>
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
     <td mat-cell class="description-cell"
-         *matCellDef="let book;">{{book.name}}</td>
+        *matCellDef="let book;">{{book.name}}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="author">
     <th mat-header-cell *matHeaderCellDef>Author</th>
     <td mat-cell class="duration-cell"
-         *matCellDef="let book;">{{book.author}}</td>
+        *matCellDef="let book;">{{book.author}}
+    </td>
   </ng-container>
 
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef>Date</th>
     <td mat-cell class="duration-cell"
-         *matCellDef="let book;">{{book.publishDate.getDate() + '-' + book.publishDate.getMonth() + '-' + book.publishDate.getFullYear()}}</td>
+        *matCellDef="let book;">{{book.publishDate.getDate() + '-' + book.publishDate.getMonth() + '-' +
+      book.publishDate.getFullYear()}}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef>Delete</th>
+    <td mat-cell class="duration-cell"
+        *matCellDef="let book;">
+      <button mat-raised-button (click)="deleteBook(book.id)">Delete</button>
+    </td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="edit">
+    <th mat-header-cell *matHeaderCellDef>Edit</th>
+    <td mat-cell class="duration-cell"
+        *matCellDef="let book;">
+      <button mat-raised-button (click)="editBook(book)">Edit</button>
+    </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
