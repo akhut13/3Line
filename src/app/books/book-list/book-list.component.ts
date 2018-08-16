@@ -3,6 +3,7 @@ import {MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/mat
 import {AddBookDialogComponent} from './add-book-dialog/add-book-dialog.component';
 import {Book} from '../../shared/book.model';
 import {tap} from 'rxjs/internal/operators';
+import {BooksService} from '../../services/books.service';
 
 
 @Component({
@@ -17,10 +18,10 @@ export class BookListComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   displayedColumns = ['checkbox', 'id', 'name', 'author', 'date', 'delete', 'edit'];
-  newBook: Book = {id: 1, name: '', author: '', publishDate: new Date()};
+  newBook: Book = {id: 1, name: '', author: '', publishDate: new Date().getTime()};
   dataSource = new MatTableDataSource([]);
   selectAll = false;
-  booksPage = [];
+  tableData = [];
   selectedBooks = [];
 
   pagination = {
@@ -30,7 +31,7 @@ export class BookListComponent implements OnInit {
     pageSizeOptions: [5, 10, 20],
   };
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private bookService: BooksService) {
   }
 
   ngOnInit() {
@@ -44,12 +45,10 @@ export class BookListComponent implements OnInit {
         this.pagination.pageSize = page.pageSize;
         this.pagination.pageIndex = page.pageIndex;
         this.updateTableData();
-        console.log('page changed', page);
       });
   }
 
   onRowClicked(row) {
-    console.log('Row clicked: ', row);
   }
 
   applyFilter(filterValue: string) {
@@ -63,11 +62,12 @@ export class BookListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       if (result) {
-        result.position = this.books[this.books.length - 1].id + 1;
-        this.books.push(result);
+        result.id = this.books[this.books.length - 1].id + 1;
+        result.publishDate = new Date(result.publishDate).getTime();
+        this.books.push(JSON.parse(JSON.stringify(result)));
         this.updateTableData();
+        this.newBook = {id: 1, name: '', author: '', publishDate: new Date().getTime()};
       }
     });
   }
@@ -79,12 +79,12 @@ export class BookListComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       if (result) {
         this.books.forEach(book => {
           if (book.id === result.id) {
             book.name = result.name;
             book.author = result.author;
+            book.publishDate = new Date(result.publishDate).getTime();
           }
         });
         this.updateTableData();
@@ -102,7 +102,7 @@ export class BookListComponent implements OnInit {
 
   deleteBook(id=null) {
     if (!id) {
-      let deleteIds = this.booksPage.filter(item => item.selected).map(book => book.id);
+      let deleteIds = this.tableData.filter(item => item.selected).map(book => book.id);
       deleteIds.forEach((id) => this.deleteBookById(id));
       this.selectAll = false;
     } else {
@@ -112,7 +112,7 @@ export class BookListComponent implements OnInit {
   }
 
   selectAllChange() {
-    this.setCheckBox(this.booksPage, this.selectAll);
+    this.setCheckBox(this.tableData, this.selectAll);
   }
 
   private setCheckBox(data, value = false) {
@@ -122,11 +122,17 @@ export class BookListComponent implements OnInit {
   }
 
   updateTableData() {
+    this.bookService.setBooks(this.books);
     let startIndex = this.pagination.pageIndex * this.pagination.pageSize;
     let endIndex = startIndex + this.pagination.pageSize;
-    this.booksPage = this.books.slice(startIndex, endIndex);
-    this.setCheckBox(this.booksPage, this.selectAll);
-    this.dataSource = new MatTableDataSource(this.booksPage);
+    this.tableData = JSON.parse(JSON.stringify(this.books.slice(startIndex, endIndex)));
+    this.setCheckBox(this.tableData, this.selectAll);
+    this.dataSource = new MatTableDataSource(this.tableData);
     this.dataSource.sort = this.sort;
+  }
+
+  getBookPublishDate(date) {
+    let bookDate = new Date(date);
+    return bookDate.getDate() + '-' + bookDate.getMonth() + '-' + bookDate.getFullYear();
   }
 }

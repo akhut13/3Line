@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Book} from '../shared/book.model';
-
-
+import {BooksService} from '../services/books.service';
 
 @Component({
   selector: 'app-books',
@@ -10,23 +9,19 @@ import {Book} from '../shared/book.model';
 })
 export class BooksComponent implements OnInit {
 
+  books: Book[] = [];
 
-  books: Book[] = [
-    {id: 1, name: 'komsemariga', author: 'kukukulii', publishDate: new Date()},
-    {id: 2, name: 'fefe', author: 'kukukulii', publishDate: new Date()},
-    {id: 3, name: 'aloha', author: 'kukukulii', publishDate: new Date()},
-    {id: 4, name: 'bura', author: 'kukukulii', publishDate: new Date()},
-    {id: 5, name: 'jora', author: 'kukukulii', publishDate: new Date()},
-    {id: 6, name: 'komseige', author: 'kukukulii', publishDate: new Date()},
-    {id: 7, name: 'opanaa', author: 'kukukulii', publishDate: new Date()},
-    {id: 8, name: 'pipu', author: 'kukukulii', publishDate: new Date()},
-    {id: 9, name: 'oma', author: 'kukukulii', publishDate: new Date()},
-    {id: 10, name: 'apa', author: 'kukukulii', publishDate: new Date()},
-    {id: 11, name: 'egi', author: 'kukukulii', publishDate: new Date()},
-  ];
-  constructor() { }
+  constructor(private booksService: BooksService) { }
 
   ngOnInit() {
+    this.booksService.getVersion().subscribe(versions => {
+      this.booksService.getBooks().subscribe(response => {
+        this.books = response;
+      })
+    })
+
   }
+
+
 
 }

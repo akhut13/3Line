@@ -12,7 +12,6 @@ export class AddBookDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AddBookDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Book) {
-    console.log('received data', data)
   }
 
   ngOnInit() {

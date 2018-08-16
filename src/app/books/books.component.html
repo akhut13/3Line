@@ -1,5 +1,5 @@
 <div class="row">
   <div class="col-md-7">
-    <app-book-list [books]="books"></app-book-list>
+    <app-book-list *ngIf="books.length" [books]="books"></app-book-list>
   </div>
 </div>

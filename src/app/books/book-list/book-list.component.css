@@ -7,9 +7,15 @@ td.mat-cell {
 }
 
 .mat-raised-button {
-  float: left
+  float: left;
+  margin-right: 15px;
 }
 
 .mat-column-checkbox {
   width: 50px;
+}
+
+.filter-input {
+  float: left;
+  margin-top: -10px;
 }
